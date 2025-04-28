@@ -1,0 +1,44 @@
+type (scope) : sujet
+
+Description
+
+_____________________________________________
+
+Type :
+    - build
+        
+    - ci
+        
+    - feat
+        Ajout d'une nouvelle fonctionnalité
+    - fix
+        Correction de bug
+    - perf
+        amélioration des performances
+    - refactor
+        refactorisation (ni feat ni perf)
+    - style
+        indentation, mise en forme...
+    - docs
+        rédaction ou màj doc
+    - test
+        ajout ou modif tests
+    - revert
+        retour ancien commit
+
+______________________________________________
+
+Sujet :
+    Description succinte, impératif présent
+
+______________________________________________
+
+Scope :
+    Si nécéssaire de préciser la portée
+
+______________________________________________
+
+Description :
+    Indique le pourquoi = raison du chamgement
+    Indique en quoi c'est différent.
+    !! N'indique pas le comment, cela se voit dans le code et les commentaires du code !!
