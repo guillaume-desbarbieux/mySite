@@ -1,0 +1,21 @@
+Choix de la méthode OOCSS pour la mise en forme CSS
+Oriented Object CSS
+
+Division claire entre la structure et l'apparence
+
+-  On utilise les classes et pas les ID
+- On sépare le conteneur et le contenu
+    - Pour cela, pas de cascade afin que le style d'un élément ne dépende pas de son conteneur
+
+- nom des classes court et descriptif
+
+
+Avantages : 
+-  Réutilisable
+-  Modulable
+-  Maintenable
+-  Combinable
+
+
+Documentation :
+https://www.design-fluide.com/21-09-2011/le-css-oriente-objet-explique-avec-monsieur-patate/
