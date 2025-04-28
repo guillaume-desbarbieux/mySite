@@ -16,7 +16,8 @@ Phase gestion de projet pour définir
 - le kanban pour suivre l'état des issues, les prioriser, évaluer leur durée.
 - Rédaction de la documentation du projet
 
-  ##Plan du site :
+ 
+Plan du site :
 
 # Accueil
 
