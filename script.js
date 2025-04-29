@@ -1,24 +1,66 @@
 
+// Ajoute au feed un bloc contenant le texte de Joke
+function addJoke(joke) {
 
-async function getJoke() {
 
-    // Récupération de la blague depuis l'API
-    const reponse = await fetch("https://v2.jokeapi.dev/joke/Any?lang=fr");
+    // Récupération du texte de Joke
+    const text = JokeToText(joke);
 
-    // Récupération de la réponse en Json
-    const joke = await reponse.json();
-  
+    // Création nouvel élément div
+    const newDiv = document.createElement("div");
+
+    // Création du nouveau noeud texte
+    const newContent = document.createTextNode(text);
+
+    // On attache le noeud texte à la div créée
+    newDiv.appendChild(newContent);
+
+    // Récupération du noeud de joke-list
     const jokeList = document.getElementById("joke-list");
 
-    // Vérification du type de joke
-    if (joke.type === "single") {
-        jokeList.append(joke.joke);
-     } else {
-        jokeList.append(`${joke.setup} <br> ${joke.delivery}`);
-    }
+    // Récupération de la première joke de la liste
+    const firstJoke = jokeList.firstChild;
+
+
+    // On insère la div créée juste avant la première joke
+    jokeList.insertBefore(newDiv, firstJoke);
 
 }
 
+// Récupère et renvoie le texte de l'objet Joke (selon type)
+function JokeToText(objet) {
 
-// Appel de la fonction pour afficher la blague
+    let jokeText = "";
+
+    if (objet.type === 'single') {
+        jokeText = objet.joke;
+    } else {
+        jokeText = objet.setup + "\n" + objet.delivery;
+    }
+
+    return jokeText;
+}
+
+
+// Récupération depuis l'API et appel addJoke
+function getJoke() {
+    fetch("https://v2.jokeapi.dev/joke/Any?lang=fr")
+        .then(res => res.json())
+        .then(res => {
+            addJoke(res)
+        });
+}
+
+
+// test 
+
+
+addJoke({ setup: "Coucou c'est toto", delivery: "et voilà" })
 getJoke();
+
+const refreshFeedButton = document.getElementById("btn-refresh-feed");
+
+refreshFeedButton.addEventListener("click", () => {
+    console.log("appel getJoke");
+    getJoke();
+});
