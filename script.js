@@ -24,6 +24,7 @@ function addJoke(joke) {
 
     // On insère la div créée juste avant la première joke
     jokeList.insertBefore(newDiv, firstJoke);
+    hideOverflowList(jokeList.children, 10);
 
 }
 
@@ -45,22 +46,45 @@ function JokeToText(objet) {
 // Récupération depuis l'API et appel addJoke
 function getJoke() {
     fetch("https://v2.jokeapi.dev/joke/Any?lang=fr")
-        .then(res => res.json())
-        .then(res => {
-            addJoke(res)
-        });
-}
+        .then(objet => objet.json())
+        .then(result => addJoke(result));
+};
 
 
-// test 
-
-
-addJoke({ setup: "Coucou c'est toto", delivery: "et voilà" })
-getJoke();
-
+// Récupération du bouton refresh par l'ID
 const refreshFeedButton = document.getElementById("btn-refresh-feed");
 
+
+
+// le clic sur le bouton appelle la fonction getJoke
 refreshFeedButton.addEventListener("click", () => {
     console.log("appel getJoke");
     getJoke();
 });
+
+
+// Fonction qui cache les éléments en surnombre dans une liste (paramètre max prend valeur 20 par défaut)
+function hideOverflowList(list, max = 20) {
+
+    console.log(list);
+
+    let iterator = 0;
+
+    for (div of list) {
+          iterator++;
+
+        if (iterator < max) {
+            div.className = "display";
+        }
+        else {
+            div.className = "hidden";
+            
+        }
+        console.log("iterator = " + iterator);
+        console.log("div = " + div);
+        console.log("hidden = " + div.hidden);
+
+    }
+
+    return list;
+}
