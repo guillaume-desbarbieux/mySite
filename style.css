@@ -22,13 +22,27 @@ h1 {
 }
 
 
+.joke-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 .btn-menu {
     font-size: 1 rem;
+    
 }
 
 .joke-list {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: darkkhaki;    
+    background-color: darkgreen;
+    margin: 1rem;    
+}
+
+.joke-list div {
+    margin: 0.5rem; 
+    background-color: lightgreen;  
 }
