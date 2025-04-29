@@ -56,10 +56,12 @@ function getJoke() {
 const refreshFeedButton = document.getElementById("btn-refresh-feed");
 
 // le clic sur le bouton appelle la fonction getJoke
-refreshFeedButton.addEventListener("click", () => {
+
+if(refreshFeedButton) {
+    refreshFeedButton.addEventListener("click", () => {
     console.log("appel getJoke");
     getJoke();
-});
+});};
 
 
 // Fonction qui cache les éléments en surnombre dans une liste (paramètre max prend valeur 20 par défaut)
@@ -98,7 +100,7 @@ const menuButton = document.getElementById("bloc-btn-menu");
 menuButton.addEventListener("click", clicOnMenu);
 
 
-// la fonction change l'état du menu (open/close)
+// la fonction change l'état des sous menus (hidden ou non)
 function clicOnMenu() {
 
     const listeMenu = document.getElementById("liste-btn-menu").children;
