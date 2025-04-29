@@ -15,9 +15,19 @@
 
     <header>
         <div><img src="/images/icone.png" alt="logo"></div>
-        <div><h1>Jeux</h1></div>
-        <div><button class="btn-menu">Menu</button></div>
+        <div>
+            <h1>Jeux</h1>
+        </div>
+        <div id="bloc-btn-menu" >
+            <button id="btn-menu" class="btn-menu">Menu</button>
+            <div id = "liste-btn-menu">
+                <button onclick="location.href=`index.html`" class="btn-menu hidden">Accueil</button>
+                <button onclick="location.href=`galerie.html`" class="btn-menu hidden">Galerie</button>
+                <button onclick="location.href=`jeux.html`" class="btn-menu hidden">Jeux</button>
+            </div>
+        </div>
     </header>
+
 
 
     <main>
