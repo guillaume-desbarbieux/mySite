@@ -46,3 +46,7 @@ h1 {
     margin: 0.5rem; 
     background-color: lightgreen;  
 }
+
+.hidden {
+    display: none;
+}
