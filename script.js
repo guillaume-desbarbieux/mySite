@@ -57,3 +57,10 @@ function getJoke() {
 
 addJoke({ setup: "Coucou c'est toto", delivery: "et voilà" })
 getJoke();
+
+const refreshFeedButton = document.getElementById("btn-refresh-feed");
+
+refreshFeedButton.addEventListener("click", () => {
+    console.log("appel getJoke");
+    getJoke();
+});
