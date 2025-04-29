@@ -24,6 +24,7 @@ function addJoke(joke) {
 
     // On insère la div créée juste avant la première joke
     jokeList.insertBefore(newDiv, firstJoke);
+
     hideOverflowList(jokeList.children, 10);
 
 }
@@ -54,8 +55,6 @@ function getJoke() {
 // Récupération du bouton refresh par l'ID
 const refreshFeedButton = document.getElementById("btn-refresh-feed");
 
-
-
 // le clic sur le bouton appelle la fonction getJoke
 refreshFeedButton.addEventListener("click", () => {
     console.log("appel getJoke");
@@ -71,15 +70,17 @@ function hideOverflowList(list, max = 20) {
     let iterator = 0;
 
     for (div of list) {
-          iterator++;
+
 
         if (iterator < max) {
             div.className = "display";
         }
         else {
             div.className = "hidden";
-            
+
         }
+
+        iterator++;
         console.log("iterator = " + iterator);
         console.log("div = " + div);
         console.log("hidden = " + div.hidden);
@@ -88,3 +89,41 @@ function hideOverflowList(list, max = 20) {
 
     return list;
 }
+
+
+// récupération du bouton Menu par l'ID
+const menuButton = document.getElementById("bloc-btn-menu");
+
+// le clic sur le bouton Menu appelle la fonction menu
+menuButton.addEventListener("click", clicOnMenu);
+
+
+// la fonction change l'état du menu (open/close)
+function clicOnMenu() {
+
+    const listeMenu = document.getElementById("liste-btn-menu").children;
+
+    for (let el of listeMenu) {
+        if (isHidden(el)) {
+            el.classList.remove("hidden");
+        } else {
+            el.classList.add("hidden");
+        }
+    }
+}
+
+
+function isHidden(div) {
+
+    console.log("is hidden ?");
+
+    for (let classe of div.classList) {
+        if (classe == "hidden") {
+            console.log("true");
+            return true;
+        }
+    }
+    console.log("false");
+    return false;
+}
+
