@@ -14,13 +14,13 @@
 <body>
 
     <header>
-        <div><img src="/images/icone.png" alt="logo"></div>
+        <img class="responsive" src="/images/icone.png" alt="logo">
         <div>
             <h1>Accueil</h1>
         </div>
-        <div id="bloc-btn-menu" >
+        <div id="bloc-btn-menu" class="bloc-btn-menu">
             <button id="btn-menu" class="btn-menu">Menu</button>
-            <div id = "liste-btn-menu">
+            <div id="liste-btn-menu">
                 <button onclick="location.href=`index.html`" class="btn-menu hidden">Accueil</button>
                 <button onclick="location.href=`galerie.html`" class="btn-menu hidden">Galerie</button>
                 <button onclick="location.href=`jeux.html`" class="btn-menu hidden">Jeux</button>
@@ -33,13 +33,31 @@
 
 
         <div class="joke-container">
-            <div><button id="btn-refresh-feed" class="btn-refresh-feed">Une autre blague ?</button></div>
+
+            <!-- Bloc boutons du feed -->
+            <div class="joke-btn">
+                <div><button id="btn-add-feed" class="btn-feed">Une autre blague ?</button></div>
+                <div><button id="btn-remove-feed" class="btn-feed">Refresh</button></div>
+                <div><button id="btn-form-feed" class="btn-feed">Ecrivez votre propre blague</button></div>
+            </div>
+
+            <!--  Bloc Formulaire du feed -->
+            <form id="bloc-form" class="form-feed" action="https://httpbin.org/post" method="post">
+                <h2 class="form-item" >Ajouter votre blague</h2>
+                <textarea class="form-item" name="joke" placeholder="Votre blague" rows="5" required></textarea>
+                <div class="btn-form form-item">
+                    <button type="reset">Effacer</button>
+                    <button type="submit">Ajouter</button>
+                </div>
+            </form>
+
+
+            <!-- Bloc Joke du feed -->
             <div id="joke-list" class="joke-list">
 
             </div>
 
         </div>
-
 
 
 
