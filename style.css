@@ -1,9 +1,9 @@
-* {
+/* * {
 border: red;
 border-width: 1px;
 border-style:solid;
 
-}
+} */
 
 
 
@@ -13,11 +13,18 @@ header {
     justify-content: space-around;
     align-items: center;
     background-color: grey;
+    height: 10vw;
+}
+
+.responsive {
+    width: auto;
+    max-height: 10vw;
+    height : auto;
 }
 
 
 h1 {
-    font-size: 2 rem;
+    font-size: 3 rem;
 
 }
 
@@ -26,12 +33,16 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 80svw;
+    margin: auto;
 }
 
 .bloc-btn-menu {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 10rem;
+    
 }
 
 
@@ -40,23 +51,53 @@ h1 {
     font-size: 2 rem;
     width : 100%;
     border: none;
-    padding : 0.4em;
-    
+       
 }
 
 .joke-list {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: darkgreen;
-    margin: 1rem;    
+    background-color:none;
+    margin: 1rem;
+    width: 100%;    
 }
 
 .joke-list div {
     margin: 0.5rem; 
-    background-color: lightgreen;  
+    background-color: lightgrey;  
 }
 
-.hidden {
-    display: none;
+
+
+.joke-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin: 1rem;
 }
+
+.form-feed{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 70%;
+    align-items: center;
+    background-color: grey;
+}
+
+.form-item {
+    width: 90%;
+    text-align: center;    
+}
+.btn-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 1rem;
+  }
+
+.hidden {
+  display: none;
+ }
