@@ -42,14 +42,14 @@
             </div>
 
             <!--  Bloc Formulaire du feed -->
-            <form id="bloc-form" class="form-feed" action="https://httpbin.org/post" method="post">
+            <div id="bloc-form" class="form-feed hidden">
                 <h2 class="form-item" >Ajouter votre blague</h2>
-                <textarea class="form-item" name="joke" placeholder="Votre blague" rows="5" required></textarea>
+                <textarea type="text" id = "jokeFromForm" class="form-item" name="joke" placeholder="Votre blague" autofocus></textarea>
                 <div class="btn-form form-item">
-                    <button type="reset">Effacer</button>
-                    <button type="submit">Ajouter</button>
+                    <button id = "reset-form">Effacer</button>
+                    <button id = "submit-form">Ajouter</button>                    
                 </div>
-            </form>
+            </div>
 
 
             <!-- Bloc Joke du feed -->
@@ -75,3 +75,5 @@
 </body>
 
 </html>
+
+
