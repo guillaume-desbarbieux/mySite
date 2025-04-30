@@ -163,12 +163,13 @@ function isHidden(div) {
     return false;
 }
 
-// récupération du bouton Menu par l'ID
+// récupération du bouton form par l'ID
 const formButton = document.getElementById("btn-form-feed");
 
-// le clic sur le bouton Menu appelle la fonction form
-formButton.addEventListener("click", clicOnForm);
-
+// le clic sur le bouton form appelle la fonction form
+if (formButton) {
+    formButton.addEventListener("click", clicOnForm);
+}
 
 // la fonction change l'état du formulaire (hidden ou non)
 function clicOnForm() {
@@ -186,16 +187,19 @@ function clicOnForm() {
 const submitform = document.getElementById("submit-form");
 
 // le clic sur le bouton submit appelle la fonction submit form
-submitform.addEventListener("click", submitFeedForm);
-
+if (submitform) {
+    submitform.addEventListener("click", submitFeedForm);
+}
 // récupération du bouton par l'ID
 const resetform = document.getElementById("reset-form");
 
 // le clic sur le bouton reset appelle la fonction reset form
-resetform.addEventListener("click", resetFeedForm);
+if (resetform) {
+    resetform.addEventListener("click", resetFeedForm);
+}
 
 function resetFeedForm() {
-    document.getElementById("jokeFromForm").value="";
+    document.getElementById("jokeFromForm").value = "";
 }
 
 
@@ -203,7 +207,8 @@ function resetFeedForm() {
 function submitFeedForm() {
 
     const textForm = document.getElementById("jokeFromForm");
-    if (textForm) {
+
+    if (textForm.value) {
         const jokeFromForm = {
             type: "single",
             joke: textForm.value,
@@ -219,3 +224,70 @@ function submitFeedForm() {
 }
 
 
+
+// récupération du bouton par l'ID
+const mosaicView = document.getElementById("btn-view-mosaic");
+
+// récupération du bouton par l'ID
+const zoomOutView = document.getElementById("btn-view-out");
+
+// récupération du bouton par l'ID
+const zoomInView = document.getElementById("btn-view-in");
+
+// récupération du bouton par l'ID
+const columnView = document.getElementById("btn-view-column");
+
+// le clic sur le bouton mosaic appelle la fonction zoom
+mosaicView.addEventListener("click", () => zoomView('min'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+zoomOutView.addEventListener("click", () => zoomView('out'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+zoomInView.addEventListener("click", () => zoomView('in'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+columnView.addEventListener("click", () => zoomView('max'));
+
+
+
+
+// fonction zoomView modifie la largeur d'affichage de chaque immage selon paramètre d'entrée
+function zoomView(zoom) {
+
+    const listeImages = document.getElementById("img-list").children;
+
+    let largeur = parseInt(listeImages[0].style.width);
+    if (isNaN(largeur)) {
+        largeur = 30;
+    }
+
+    switch (zoom) {
+        case 'min':
+            largeur = 10;
+            break;
+        case 'out':
+            largeur = largeur - 10;
+            break;
+        case 'in':
+            largeur = largeur + 10;
+            break;
+        case 'max':
+            largeur = 90;
+            break;
+    }
+
+    console.log(largeur);
+
+    if (largeur > 90) { (largeur = 90); };
+    if (largeur < 10) { (largeur = 10); };
+
+    largeur = `${largeur}vw`;
+    console.log(largeur);
+
+    for (el of listeImages) {
+        el.style.width = largeur
+    }
+
+
+}
