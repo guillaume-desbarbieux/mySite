@@ -14,13 +14,13 @@
 <body>
 
     <header>
-        <div><img src="/images/icone.png" alt="logo"></div>
+        <img class="responsive" src="/images/icone.png" alt="logo">
         <div>
             <h1>Galerie</h1>
         </div>
-        <div id="bloc-btn-menu" >
+        <div id="bloc-btn-menu" class="bloc-btn-menu">
             <button id="btn-menu" class="btn-menu">Menu</button>
-            <div id = "liste-btn-menu">
+            <div id="liste-btn-menu">
                 <button onclick="location.href=`index.html`" class="btn-menu hidden">Accueil</button>
                 <button onclick="location.href=`galerie.html`" class="btn-menu hidden">Galerie</button>
                 <button onclick="location.href=`jeux.html`" class="btn-menu hidden">Jeux</button>
@@ -28,12 +28,30 @@
         </div>
     </header>
 
-
-
     <main>
 
-        <div>
- 
+        <div class="galerie-container">
+
+            <!-- Bloc boutons de galerie -->
+            <div class="bloc-btn">
+                <div><button id="btn-view-mosaic" class="btn">Mosaique</button></div>
+                <div><button id="btn-view-out" class="btn">Zoom -</button></div>
+                <div><button id="btn-view-in" class="btn">Zoom +</button></div>
+                <div><button id="btn-view-column" class="btn">Colonne</button></div>
+            </div>
+
+
+            <!-- Bloc images de galerie -->
+            <div id="img-list" class="img-list">
+                <img src="./images/1.jpg" alt="">
+                <img src="./images/2.jpg" alt="">
+                <img src="./images/3.jpg" alt="">
+                <img src="./images/4.jpg" alt="">
+                <img src="./images/5.jpg" alt="">
+                <img src="./images/6.jpg" alt="">
+
+            </div>
+
         </div>
 
 
