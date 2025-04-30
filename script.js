@@ -53,7 +53,7 @@ function getJoke() {
 
 
 // Récupération du bouton refresh par l'ID
-const refreshFeedButton = document.getElementById("btn-refresh-feed");
+const refreshFeedButton = document.getElementById("btn-add-feed");
 
 // le clic sur le bouton appelle la fonction getJoke
 
@@ -129,3 +129,21 @@ function isHidden(div) {
     return false;
 }
 
+// récupération du bouton Menu par l'ID
+const formButton = document.getElementById("btn-form-feed");
+
+// le clic sur le bouton Menu appelle la fonction menu
+formButton.addEventListener("click", clicOnForm);
+
+
+// la fonction change l'état des sous menus (hidden ou non)
+function clicOnForm() {
+
+    const blocForm = document.getElementById("bloc-form");
+console.log("avant" + blocForm.classList);
+    if (isHidden(blocForm)) {
+        blocForm.classList.remove("hidden");
+    } else {
+        blocForm.classList.add("hidden");
+    }
+}
