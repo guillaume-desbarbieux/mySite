@@ -57,11 +57,12 @@ const refreshFeedButton = document.getElementById("btn-refresh-feed");
 
 // le clic sur le bouton appelle la fonction getJoke
 
-if(refreshFeedButton) {
+if (refreshFeedButton) {
     refreshFeedButton.addEventListener("click", () => {
-    console.log("appel getJoke");
-    getJoke();
-});};
+        console.log("appel getJoke");
+        getJoke();
+    });
+};
 
 
 // Fonction qui cache les éléments en surnombre dans une liste (paramètre max prend valeur 20 par défaut)
@@ -75,12 +76,11 @@ function hideOverflowList(list, max = 20) {
 
 
         if (iterator < max) {
-            div.className = "display";
+            div.classList.remove("hidden");
+        } else {
+            div.classList.add("hidden");
         }
-        else {
-            div.className = "hidden";
 
-        }
 
         iterator++;
         console.log("iterator = " + iterator);
@@ -114,7 +114,7 @@ function clicOnMenu() {
     }
 }
 
-
+// La fonction renvoie un booléen : "hidden" est une des classe de la div en paramètre
 function isHidden(div) {
 
     console.log("is hidden ?");
