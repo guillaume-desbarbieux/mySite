@@ -12,33 +12,16 @@ function addJoke(joke) {
     // Création nouvel élément div
     const newDiv = document.createElement("div");
 
-    // Création nouvel élément div
+    // Initialisation nouvel élément div
     newDiv.innerHTML = `<div>
                           <p>${text}</p>
                        </div> `;
-    console.log(newDiv);
-    console.log(newDiv.innerHTML);
-
-
-    /*
-    // Création du nouveau noeud texte
-    const newContent = document.createTextNode(text);
-
-    // On attache le noeud texte à la div créée
-    newDiv.appendChild(newContent);
-    */
-
 
     // Récupération de la première joke de la liste
     const firstJoke = jokeList.firstChild;
 
     // On insère la div créée juste avant la première joke
     jokeList.insertBefore(newDiv, firstJoke);
-
-    console.log("jokeList");
-    console.log(jokeList.children);
-
-    console.log(jokeList);
 
     hideOverflowList(jokeList.children, 10);
 
@@ -163,12 +146,13 @@ function isHidden(div) {
     return false;
 }
 
-// récupération du bouton Menu par l'ID
+// récupération du bouton form par l'ID
 const formButton = document.getElementById("btn-form-feed");
 
-// le clic sur le bouton Menu appelle la fonction form
-formButton.addEventListener("click", clicOnForm);
-
+// le clic sur le bouton form appelle la fonction form
+if (formButton) {
+    formButton.addEventListener("click", clicOnForm);
+}
 
 // la fonction change l'état du formulaire (hidden ou non)
 function clicOnForm() {
@@ -186,16 +170,19 @@ function clicOnForm() {
 const submitform = document.getElementById("submit-form");
 
 // le clic sur le bouton submit appelle la fonction submit form
-submitform.addEventListener("click", submitFeedForm);
-
+if (submitform) {
+    submitform.addEventListener("click", submitFeedForm);
+}
 // récupération du bouton par l'ID
 const resetform = document.getElementById("reset-form");
 
 // le clic sur le bouton reset appelle la fonction reset form
-resetform.addEventListener("click", resetFeedForm);
+if (resetform) {
+    resetform.addEventListener("click", resetFeedForm);
+}
 
 function resetFeedForm() {
-    document.getElementById("jokeFromForm").value="";
+    document.getElementById("jokeFromForm").value = "";
 }
 
 
@@ -203,15 +190,12 @@ function resetFeedForm() {
 function submitFeedForm() {
 
     const textForm = document.getElementById("jokeFromForm");
-    if (textForm) {
+
+    if (textForm.value) {
         const jokeFromForm = {
             type: "single",
             joke: textForm.value,
         }
-
-        console.log("apres");
-        console.log(jokeFromForm);
-        console.log(textForm.value);
 
         addJoke(jokeFromForm);
         resetFeedForm();
@@ -219,3 +203,119 @@ function submitFeedForm() {
 }
 
 
+
+// récupération du bouton par l'ID
+const mosaicView = document.getElementById("btn-view-mosaic");
+
+// récupération du bouton par l'ID
+const zoomOutView = document.getElementById("btn-view-out");
+
+// récupération du bouton par l'ID
+const zoomInView = document.getElementById("btn-view-in");
+
+// récupération du bouton par l'ID
+const columnView = document.getElementById("btn-view-column");
+
+// le clic sur le bouton mosaic appelle la fonction zoom
+mosaicView.addEventListener("click", () => zoomView('min'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+zoomOutView.addEventListener("click", () => zoomView('out'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+zoomInView.addEventListener("click", () => zoomView('in'));
+
+// le clic sur le bouton submit appelle la fonction submit form
+columnView.addEventListener("click", () => zoomView('max'));
+
+
+
+
+// fonction zoomView modifie la largeur d'affichage de chaque immage selon paramètre d'entrée
+function zoomView(zoom) {
+
+    const listeImages = document.getElementById("img-list").children;
+    console.log(listeImages[0].style.width);
+    console.log(listeImages[0]);
+
+    let largeur = parseInt(listeImages[0].style.width);
+    if (isNaN(largeur)) {
+        largeur = 30;
+    }
+
+    switch (zoom) {
+        case 'min':
+            largeur = 10;
+            break;
+        case 'out':
+            largeur = largeur - 10;
+            break;
+        case 'in':
+            largeur = largeur + 10;
+            break;
+        case 'max':
+            largeur = 90;
+            break;
+    }
+
+    if (largeur > 90) { (largeur = 90); };
+    if (largeur < 10) { (largeur = 10); };
+
+    largeur = `${largeur}vw`;
+    
+
+    for (el of listeImages) {
+        el.style.width = largeur
+    }
+    console.log(listeImages[0].style.width);
+    console.log(listeImages[0]);
+}
+
+// Initialisation au chargement
+zoomView('out');
+
+// récupération du bouton par l'ID
+const btnAddImg = document.getElementById("btn-add-img");
+
+// le clic sur le bouton btnAddImg appelle la fonction addImg
+btnAddImg.addEventListener("click", addImg);
+
+// La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
+function addImg() {
+
+    const URL = document.getElementById("inputUrlImg").value;
+
+    if (isURL(URL)) {
+
+        // Récupération du noeud de img-list
+        const imgList = document.getElementById("img-list");
+
+        // Récupération de la première image de la liste
+        const firstImg = imgList.firstChild;
+        console.log(firstImg);
+
+        // Création nouvel élément img
+        const newImg = document.createElement("img");
+
+        // Initialisation nouvel élément img
+        newImg.setAttribute('src', `${URL}`);
+        newImg.style.width = imgList.children[0].style.width;
+
+        // On insère la div créée juste avant la première image
+        imgList.insertBefore(newImg, firstImg);
+        resetURLImage();
+    } else {
+        alert(`URL invalide !\n \n ${URL}`);
+    }
+}
+
+function resetURLImage() {
+    document.getElementById("inputUrlImg").value = "";
+}
+
+function isURL(URL) {
+    const a = document.createElement('a');
+    a.href = URL;
+    console.log(a.host);
+    return (a.host && a.host != window.location.host);
+}
