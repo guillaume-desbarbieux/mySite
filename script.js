@@ -19,7 +19,7 @@ function addJoke(joke) {
 
     if (joke.source === "user") {
         newDiv.classList.add("user");
-       };
+    };
 
     // Récupération de la première joke de la liste
     const firstJoke = jokeList.firstChild;
@@ -348,6 +348,19 @@ function refreshUserAdd() {
 // La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
 function suppElement() {
     this.remove();
-        hideOverflowList(document.getElementById("joke-list").children, 10);
+    hideOverflowList(document.getElementById("joke-list").children, 10);
 
 }
+let slideIndex = 0;
+function showPublicite() {
+    let slides = document.getElementById("publicite").children;
+    for (slide of slides) {
+        slide.style.display = "none";
+    }
+    slides[slideIndex].style.display = "block";
+
+    slideIndex = (slideIndex + 1) % slides.length;
+    console.log(slides.length," ",slideIndex);
+}
+showPublicite();
+setInterval(showPublicite,3000);
