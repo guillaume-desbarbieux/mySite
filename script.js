@@ -17,6 +17,10 @@ function addJoke(joke) {
                           <p>${text}</p>
                        </div> `;
 
+    if (joke.source === "user") {
+        newDiv.classList.add("user");
+       };
+
     // Récupération de la première joke de la liste
     const firstJoke = jokeList.firstChild;
 
@@ -24,6 +28,7 @@ function addJoke(joke) {
     jokeList.insertBefore(newDiv, firstJoke);
 
     hideOverflowList(jokeList.children, 10);
+    refreshUserAdd();
 
 }
 
@@ -38,7 +43,6 @@ function JokeToText(objet) {
     } else {
         jokeText = objet.setup + "\n" + objet.delivery;
     }
-    console.log(jokeText);
     return jokeText;
 }
 
@@ -57,7 +61,6 @@ const addFeedButton = document.getElementById("btn-add-feed");
 // le clic sur le bouton appelle la fonction getJoke
 if (addFeedButton) {
     addFeedButton.addEventListener("click", () => {
-        console.log("appel getJoke");
         getJoke();
     });
 };
@@ -68,7 +71,6 @@ const removeFeedButton = document.getElementById("btn-remove-feed");
 // le clic sur le bouton appelle la fonction getJoke
 if (removeFeedButton) {
     removeFeedButton.addEventListener("click", () => {
-        console.log("appel removeFeed");
         removeFeed();
     });
 };
@@ -85,8 +87,6 @@ function removeFeed() {
 // Fonction qui cache les éléments en surnombre dans une liste (paramètre max prend valeur 20 par défaut)
 function hideOverflowList(list, max = 20) {
 
-    console.log(list);
-
     let iterator = 0;
 
     for (div of list) {
@@ -97,13 +97,7 @@ function hideOverflowList(list, max = 20) {
         } else {
             div.classList.add("hidden");
         }
-
-
         iterator++;
-        console.log("iterator = " + iterator);
-        console.log("div = " + div);
-        console.log("hidden = " + div.hidden);
-
     }
 
     return list;
@@ -134,15 +128,11 @@ function clicOnMenu() {
 // La fonction renvoie un booléen : "hidden" est une des classe de la div en paramètre
 function isHidden(div) {
 
-    console.log("is hidden ?");
-
     for (let classe of div.classList) {
         if (classe == "hidden") {
-            console.log("true");
             return true;
         }
     }
-    console.log("false");
     return false;
 }
 
@@ -158,7 +148,6 @@ if (formButton) {
 function clicOnForm() {
 
     const blocForm = document.getElementById("bloc-form");
-    console.log("avant" + blocForm.classList);
     if (isHidden(blocForm)) {
         blocForm.classList.remove("hidden");
     } else {
@@ -195,6 +184,7 @@ function submitFeedForm() {
         const jokeFromForm = {
             type: "single",
             joke: textForm.value,
+            source: "user",
         }
 
         addJoke(jokeFromForm);
@@ -217,17 +207,24 @@ const zoomInView = document.getElementById("btn-view-in");
 const columnView = document.getElementById("btn-view-column");
 
 // le clic sur le bouton mosaic appelle la fonction zoom
-mosaicView.addEventListener("click", () => zoomView('min'));
+if (mosaicView) {
+    mosaicView.addEventListener("click", () => zoomView('min'));
+}
 
 // le clic sur le bouton submit appelle la fonction submit form
-zoomOutView.addEventListener("click", () => zoomView('out'));
+if (zoomOutView) {
+    zoomOutView.addEventListener("click", () => zoomView('out'));
+}
 
 // le clic sur le bouton submit appelle la fonction submit form
-zoomInView.addEventListener("click", () => zoomView('in'));
+if (zoomInView) {
+    zoomInView.addEventListener("click", () => zoomView('in'));
+}
 
 // le clic sur le bouton submit appelle la fonction submit form
-columnView.addEventListener("click", () => zoomView('max'));
-
+if (columnView) {
+    columnView.addEventListener("click", () => zoomView('max'));
+}
 
 
 
@@ -235,8 +232,6 @@ columnView.addEventListener("click", () => zoomView('max'));
 function zoomView(zoom) {
 
     const listeImages = document.getElementById("img-list").children;
-    console.log(listeImages[0].style.width);
-    console.log(listeImages[0]);
 
     let largeur = parseInt(listeImages[0].style.width);
     if (isNaN(largeur)) {
@@ -262,13 +257,11 @@ function zoomView(zoom) {
     if (largeur < 10) { (largeur = 10); };
 
     largeur = `${largeur}vw`;
-    
+
 
     for (el of listeImages) {
         el.style.width = largeur
     }
-    console.log(listeImages[0].style.width);
-    console.log(listeImages[0]);
 }
 
 // Initialisation au chargement
@@ -283,39 +276,78 @@ btnAddImg.addEventListener("click", addImg);
 // La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
 function addImg() {
 
-    const URL = document.getElementById("inputUrlImg").value;
+    const webPath = document.getElementById("inputUrlImg").value;
+    const file = document.getElementById("inputLocalImg").files[0];
+    let path = 0;
 
-    if (isURL(URL)) {
+    if (webPath) {
+        if (isURL(webPath)) {
+            path = webPath;
+        } else {
+            alert("URL invalide.");
+            resetAddImage()
+        }
+    }
 
+    if (file) {
+        if (file.type.includes("image")) {
+            path = URL.createObjectURL(file);
+        } else {
+            alert("Ce fichier n'est pas une image.")
+            resetAddImage()
+        }
+    }
+
+    if (path) {
         // Récupération du noeud de img-list
         const imgList = document.getElementById("img-list");
 
         // Récupération de la première image de la liste
         const firstImg = imgList.firstChild;
-        console.log(firstImg);
 
         // Création nouvel élément img
         const newImg = document.createElement("img");
 
         // Initialisation nouvel élément img
-        newImg.setAttribute('src', `${URL}`);
+        newImg.setAttribute('src', `${path}`);
         newImg.style.width = imgList.children[0].style.width;
+        newImg.classList.add("user");
 
         // On insère la div créée juste avant la première image
         imgList.insertBefore(newImg, firstImg);
-        resetURLImage();
-    } else {
-        alert(`URL invalide !\n \n ${URL}`);
+        resetAddImage();
+        refreshUserAdd()
+
     }
 }
 
-function resetURLImage() {
+function resetAddImage() {
     document.getElementById("inputUrlImg").value = "";
+    document.getElementById("inputLocalImg").value = "";
 }
 
-function isURL(URL) {
-    const a = document.createElement('a');
-    a.href = URL;
-    console.log(a.host);
-    return (a.host && a.host != window.location.host);
+function isURL(lien) {
+    try {
+        new URL(lien);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+function refreshUserAdd() {
+    let userAdd = document.getElementsByClassName("user");
+
+    for (el of userAdd) {
+        console.log(el);
+        el.addEventListener("click", suppElement);
+    };
+}
+
+
+// La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
+function suppElement() {
+    this.remove();
+        hideOverflowList(document.getElementById("joke-list").children, 10);
+
 }
