@@ -75,19 +75,11 @@ h1 {
     flex-direction: row;
     justify-content: center;
     width: 100%;
-    margin: 1rem;
-    margin-top: 0;
 }
 
-.bloc-add-img {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    margin: 1rem;
-    margin-bottom: 0;
+#btn-add-img {
+    background-color: lightgreen ;
 }
-
 
 .form-feed {
     display: flex;
