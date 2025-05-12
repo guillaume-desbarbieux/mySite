@@ -262,7 +262,7 @@ function zoomView(zoom) {
     if (largeur < 10) { (largeur = 10); };
 
     largeur = `${largeur}vw`;
-    
+
 
     for (el of listeImages) {
         el.style.width = largeur
@@ -283,10 +283,32 @@ btnAddImg.addEventListener("click", addImg);
 // La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
 function addImg() {
 
-    const URL = document.getElementById("inputUrlImg").value;
+    const webPath = document.getElementById("inputUrlImg").value;
+    const file = document.getElementById("inputLocalImg").files[0];
+    console.log(file);
+    let path = 0;
 
-    if (isURL(URL)) {
+    if (webPath) {
+        if (isURL(webPath)) {
+            path = webPath;
+        } else {
+            alert("URL invalide.");
+            resetAddImage()
+        }
+    }
 
+    if (file) {
+        if (file.type.includes("image")) {
+            path = URL.createObjectURL(file);
+        } else {
+            alert("Ce fichier n'est pas une image.")
+            resetAddImage()
+        }
+    }
+
+    if (path) {
+        console.log("création img");
+        console.log(path);
         // Récupération du noeud de img-list
         const imgList = document.getElementById("img-list");
 
@@ -298,24 +320,26 @@ function addImg() {
         const newImg = document.createElement("img");
 
         // Initialisation nouvel élément img
-        newImg.setAttribute('src', `${URL}`);
+        newImg.setAttribute('src', `${path}`);
         newImg.style.width = imgList.children[0].style.width;
 
         // On insère la div créée juste avant la première image
         imgList.insertBefore(newImg, firstImg);
-        resetURLImage();
-    } else {
-        alert(`URL invalide !\n \n ${URL}`);
+        resetAddImage();
+
     }
 }
 
-function resetURLImage() {
+function resetAddImage() {
     document.getElementById("inputUrlImg").value = "";
+    document.getElementById("inputLocalImg").value = "";
 }
 
-function isURL(URL) {
-    const a = document.createElement('a');
-    a.href = URL;
-    console.log(a.host);
-    return (a.host && a.host != window.location.host);
+function isURL(lien) {
+    try {
+        new URL(lien);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
