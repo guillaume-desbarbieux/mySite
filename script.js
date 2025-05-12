@@ -12,33 +12,16 @@ function addJoke(joke) {
     // Création nouvel élément div
     const newDiv = document.createElement("div");
 
-    // Création nouvel élément div
+    // Initialisation nouvel élément div
     newDiv.innerHTML = `<div>
                           <p>${text}</p>
                        </div> `;
-    console.log(newDiv);
-    console.log(newDiv.innerHTML);
-
-
-    /*
-    // Création du nouveau noeud texte
-    const newContent = document.createTextNode(text);
-
-    // On attache le noeud texte à la div créée
-    newDiv.appendChild(newContent);
-    */
-
 
     // Récupération de la première joke de la liste
     const firstJoke = jokeList.firstChild;
 
     // On insère la div créée juste avant la première joke
     jokeList.insertBefore(newDiv, firstJoke);
-
-    console.log("jokeList");
-    console.log(jokeList.children);
-
-    console.log(jokeList);
 
     hideOverflowList(jokeList.children, 10);
 
@@ -214,10 +197,6 @@ function submitFeedForm() {
             joke: textForm.value,
         }
 
-        console.log("apres");
-        console.log(jokeFromForm);
-        console.log(textForm.value);
-
         addJoke(jokeFromForm);
         resetFeedForm();
     }
@@ -256,6 +235,8 @@ columnView.addEventListener("click", () => zoomView('max'));
 function zoomView(zoom) {
 
     const listeImages = document.getElementById("img-list").children;
+    console.log(listeImages[0].style.width);
+    console.log(listeImages[0]);
 
     let largeur = parseInt(listeImages[0].style.width);
     if (isNaN(largeur)) {
@@ -277,17 +258,64 @@ function zoomView(zoom) {
             break;
     }
 
-    console.log(largeur);
-
     if (largeur > 90) { (largeur = 90); };
     if (largeur < 10) { (largeur = 10); };
 
     largeur = `${largeur}vw`;
-    console.log(largeur);
+    
 
     for (el of listeImages) {
         el.style.width = largeur
     }
+    console.log(listeImages[0].style.width);
+    console.log(listeImages[0]);
+}
 
+// Initialisation au chargement
+zoomView('out');
 
+// récupération du bouton par l'ID
+const btnAddImg = document.getElementById("btn-add-img");
+
+// le clic sur le bouton btnAddImg appelle la fonction addImg
+btnAddImg.addEventListener("click", addImg);
+
+// La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
+function addImg() {
+
+    const URL = document.getElementById("inputUrlImg").value;
+
+    if (isURL(URL)) {
+
+        // Récupération du noeud de img-list
+        const imgList = document.getElementById("img-list");
+
+        // Récupération de la première image de la liste
+        const firstImg = imgList.firstChild;
+        console.log(firstImg);
+
+        // Création nouvel élément img
+        const newImg = document.createElement("img");
+
+        // Initialisation nouvel élément img
+        newImg.setAttribute('src', `${URL}`);
+        newImg.style.width = imgList.children[0].style.width;
+
+        // On insère la div créée juste avant la première image
+        imgList.insertBefore(newImg, firstImg);
+        resetURLImage();
+    } else {
+        alert(`URL invalide !\n \n ${URL}`);
+    }
+}
+
+function resetURLImage() {
+    document.getElementById("inputUrlImg").value = "";
+}
+
+function isURL(URL) {
+    const a = document.createElement('a');
+    a.href = URL;
+    console.log(a.host);
+    return (a.host && a.host != window.location.host);
 }
