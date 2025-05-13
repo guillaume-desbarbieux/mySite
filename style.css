@@ -130,9 +130,44 @@ border-style:solid;
  }
 
  .publicite {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 20vw;
-    width: auto;
+     display: flex;
+     flex-direction: row;
+     justify-content: center;
+     height: 20vw;
+     width: auto;
+ }
+
+ #plateauMemory {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     font-size: 4vw;
+
+ }
+
+ .cellule {
+     border-color: white;
+     border-style: solid;
+     background-color: black;
+ }
+
+ .hiddenCard {
+     opacity: 0;
+ }
+
+ .guessingCard {
+     background-color: yellow;
+ }
+
+ .foundCard {
+     background-color: green;
+ }
+
+ .falseCard {
+     background-color: red;
+
+ }
+
+ .cellule:hover {
+     border-color: red;
  }

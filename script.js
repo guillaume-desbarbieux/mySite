@@ -265,13 +265,17 @@ function zoomView(zoom) {
 }
 
 // Initialisation au chargement
-zoomView('out');
+if (document.getElementById("img-list")) {
+    zoomView('out');
+}
 
 // récupération du bouton par l'ID
 const btnAddImg = document.getElementById("btn-add-img");
 
 // le clic sur le bouton btnAddImg appelle la fonction addImg
-btnAddImg.addEventListener("click", addImg);
+if (btnAddImg) {
+    btnAddImg.addEventListener("click", addImg);
+}
 
 // La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
 function addImg() {
@@ -360,7 +364,144 @@ function showPublicite() {
     slides[slideIndex].style.display = "block";
 
     slideIndex = (slideIndex + 1) % slides.length;
-    console.log(slides.length," ",slideIndex);
+    console.log(slides.length, " ", slideIndex);
 }
-showPublicite();
-setInterval(showPublicite,3000);
+if (document.getElementById("publicite")) {
+    showPublicite();
+    setInterval(showPublicite, 3000);
+}
+
+// récupération du bouton Niveau de difficilté par l'ID
+const memoryButtonDifficulte = document.getElementById("btn-difficulte");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoryButtonDifficulte.addEventListener("click", choixDifficulte);
+
+
+// la fonction change l'état des sous menus niveaux de difficultés (hidden ou non)
+function choixDifficulte() {
+
+    const listeNiveaux = document.getElementById("liste-btn-difficulte").children;
+
+    for (let el of listeNiveaux) {
+        if (isHidden(el)) {
+            el.classList.remove("hidden");
+        } else {
+            el.classList.add("hidden");
+        }
+    }
+}
+
+
+// récupération du bouton Niveau facile par l'ID
+const memoryButtonFacile = document.getElementById("btn-facile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonFacile.addEventListener("click", () => callMemoryAPI('facile'));
+
+// récupération du bouton Niveau moyen par l'ID
+const memoryButtonMoyen = document.getElementById("btn-moyen");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonMoyen.addEventListener("click", () => callMemoryAPI('moyen'));
+
+// récupération du bouton Niveau facile par l'ID
+const memoryButtonDifficile = document.getElementById("btn-difficile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonDifficile.addEventListener("click", () => callMemoryAPI('difficile'));
+
+// Appel API selon difficulté choisie puis apelle setMemoryPlateau
+function callMemoryAPI(level) {
+    let lienApi = "";
+    choixDifficulte();
+
+    switch (level) {
+        case 'facile':
+            lienApi = "https://mocki.io/v1/f3ce40d6-4423-4de6-a4d1-45bc5ba25251";
+            break;
+        case 'moyen':
+            lienApi = "https://mocki.io/v1/57775561-3329-4298-b2b6-9c9232270e32";
+            break;
+        case 'difficile':
+            lienApi = "https://mocki.io/v1/66ffedd0-79a6-4750-a21b-a6ad5876a4f7";
+            break;
+    }
+
+    fetch(lienApi).then(objet => objet.json()).then(result => setMemoryPlateau(result));
+}
+
+
+// Efface le plateau précédent / crée une liste des images depuis objet API
+// crée les div cellule et div card et affecte aléatoirement une image pour chacune
+//
+
+function setMemoryPlateau(objet) {
+
+    const containerPlateau = document.getElementById("plateauMemory");
+
+    while (containerPlateau.firstChild) {
+        containerPlateau.removeChild(containerPlateau.firstChild);
+    }
+
+    let listeImages = Object.values(objet.images);
+    listeImages = listeImages.concat(listeImages);
+
+    const hauteur = 5;
+    const largeur = listeImages.length / 5;
+
+    for (let i = 0; i < largeur; i++) {
+        let ligne = document.createElement("div");
+
+        for (let j = 0; j < hauteur; j++) {
+
+            let cellule = document.createElement("div");
+            cellule.className = "cellule";
+
+            let card = document.createElement("div");
+
+            card.className = "hiddenCard";
+            card.addEventListener("click", returnCard);
+
+            let k = Math.floor(Math.random() * listeImages.length);
+            card.innerText = listeImages[k]
+            listeImages.splice(k, 1);
+
+            cellule.appendChild(card);
+            ligne.appendChild(cellule);
+        }
+        containerPlateau.appendChild(ligne);
+    }
+}
+
+function returnCard() {
+
+    const currentCard = this;
+
+    const listFalseCard = document.getElementsByClassName("falseCard");
+    if (listFalseCard.length == 2) {
+        let card1 = listFalseCard[0];
+        let card2 = listFalseCard[1];
+        card1.className = "hiddenCard";
+        card2.className = "hiddenCard";
+    }
+
+    if (currentCard.className = "hiddenCard") {
+        currentCard.className = "guessingCard";
+
+        let listGuessingCard = document.getElementsByClassName("guessingCard");
+
+        if (listGuessingCard.length == 2) {
+            let card1 = listGuessingCard[0];
+            let card2 = listGuessingCard[1];
+
+            if (card1.innerText == card2.innerText) {
+                card1.className = "foundCard";
+                card2.className = "foundCard";
+            } else {
+                card1.className = "falseCard";
+                card2.className = "falseCard";
+            }
+        }
+    }
+}
