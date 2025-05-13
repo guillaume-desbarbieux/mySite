@@ -265,13 +265,17 @@ function zoomView(zoom) {
 }
 
 // Initialisation au chargement
-zoomView('out');
+if (document.getElementById("img-list")) {
+    zoomView('out');
+}
 
 // récupération du bouton par l'ID
 const btnAddImg = document.getElementById("btn-add-img");
 
 // le clic sur le bouton btnAddImg appelle la fonction addImg
-btnAddImg.addEventListener("click", addImg);
+if (btnAddImg) {
+    btnAddImg.addEventListener("click", addImg);
+}
 
 // La fonction récupère le chemin de l'image entré par l'utilisateur et l'ajoute dans la galerie
 function addImg() {
@@ -360,7 +364,69 @@ function showPublicite() {
     slides[slideIndex].style.display = "block";
 
     slideIndex = (slideIndex + 1) % slides.length;
-    console.log(slides.length," ",slideIndex);
+    console.log(slides.length, " ", slideIndex);
 }
-showPublicite();
-setInterval(showPublicite,3000);
+if (document.getElementById("publicite")) {
+    showPublicite();
+    setInterval(showPublicite, 3000);
+}
+
+// récupération du bouton Niveau de difficilté par l'ID
+const memoryButtonDifficulte = document.getElementById("btn-difficulte");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoryButtonDifficulte.addEventListener("click", choixDifficulte);
+
+
+// la fonction change l'état des sous menus niveaux de difficultés (hidden ou non)
+function choixDifficulte() {
+
+    const listeNiveaux = document.getElementById("liste-btn-difficulte").children;
+
+    for (let el of listeNiveaux) {
+        if (isHidden(el)) {
+            el.classList.remove("hidden");
+        } else {
+            el.classList.add("hidden");
+        }
+    }
+}
+
+
+// récupération du bouton Niveau facile par l'ID
+const memoryButtonFacile = document.getElementById("btn-facile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoryButtonFacile.addEventListener("click", () => playMemory('facile'));
+
+// récupération du bouton Niveau moyen par l'ID
+const memoryButtonMoyen = document.getElementById("btn-moyen");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoryButtonMoyen.addEventListener("click", () => playMemory('moyen'));
+
+// récupération du bouton Niveau facile par l'ID
+const memoryButtonDifficile = document.getElementById("btn-difficile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoryButtonDifficile.addEventListener("click", () => playMemory('difficile'));
+
+function playMemory(level) {
+    let nbPaires = 0;
+    choixDifficulte();
+
+    switch (level) {
+        case 'facile':
+            nbPaires = 5;
+            break;
+        case 'moyen':
+            nbPaires = 15;
+            break;
+        case 'difficile':
+            nbPaires = 25;
+            break;
+    }
+    let nbTentatives = 2*nbPaires;
+    console.log(nbPaires," en ",nbTentatives);
+
+}
