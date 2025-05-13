@@ -396,52 +396,112 @@ function choixDifficulte() {
 // récupération du bouton Niveau facile par l'ID
 const memoryButtonFacile = document.getElementById("btn-facile");
 
-// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
-memoryButtonFacile.addEventListener("click", () => playMemory('facile'));
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonFacile.addEventListener("click", () => callMemoryAPI('facile'));
 
 // récupération du bouton Niveau moyen par l'ID
 const memoryButtonMoyen = document.getElementById("btn-moyen");
 
-// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
-memoryButtonMoyen.addEventListener("click", () => playMemory('moyen'));
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonMoyen.addEventListener("click", () => callMemoryAPI('moyen'));
 
 // récupération du bouton Niveau facile par l'ID
 const memoryButtonDifficile = document.getElementById("btn-difficile");
 
-// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
-memoryButtonDifficile.addEventListener("click", () => playMemory('difficile'));
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoryButtonDifficile.addEventListener("click", () => callMemoryAPI('difficile'));
 
-function playMemory(level) {
-    let nbPaires = 0;
+// Appel API selon difficulté choisie puis apelle setMemoryPlateau
+function callMemoryAPI(level) {
     let lienApi = "";
     choixDifficulte();
 
     switch (level) {
         case 'facile':
-            nbPaires = 5;
             lienApi = "https://mocki.io/v1/f3ce40d6-4423-4de6-a4d1-45bc5ba25251";
             break;
         case 'moyen':
-            nbPaires = 15;
             lienApi = "https://mocki.io/v1/57775561-3329-4298-b2b6-9c9232270e32";
             break;
         case 'difficile':
-            nbPaires = 25;
             lienApi = "https://mocki.io/v1/66ffedd0-79a6-4750-a21b-a6ad5876a4f7";
             break;
     }
 
-    let nbTentatives = 2 * nbPaires;
-    console.log(nbPaires, " en ", nbTentatives);
-
-
-    fetch(lienApi).then(objet => objet.json()).then(result => console.log(result));
+    fetch(lienApi).then(objet => objet.json()).then(result => setMemoryPlateau(result));
 }
 
 
+// Efface le plateau précédent / crée une liste des images depuis objet API
+// crée les div cellule et div card et affecte aléatoirement une image pour chacune
+//
 
+function setMemoryPlateau(objet) {
 
+    const containerPlateau = document.getElementById("plateauMemory");
 
+    while (containerPlateau.firstChild) {
+        containerPlateau.removeChild(containerPlateau.firstChild);
+    }
 
+    let listeImages = Object.values(objet.images);
+    listeImages = listeImages.concat(listeImages);
 
+    const hauteur = 5;
+    const largeur = listeImages.length / 5;
 
+    for (let i = 0; i < largeur; i++) {
+        let ligne = document.createElement("div");
+
+        for (let j = 0; j < hauteur; j++) {
+
+            let cellule = document.createElement("div");
+            cellule.className = "cellule";
+
+            let card = document.createElement("div");
+
+            card.className = "hiddenCard";
+            card.addEventListener("click", returnCard);
+
+            let k = Math.floor(Math.random() * listeImages.length);
+            card.innerText = listeImages[k]
+            listeImages.splice(k, 1);
+
+            cellule.appendChild(card);
+            ligne.appendChild(cellule);
+        }
+        containerPlateau.appendChild(ligne);
+    }
+}
+
+function returnCard() {
+
+    const currentCard = this;
+
+    const listFalseCard = document.getElementsByClassName("falseCard");
+    if (listFalseCard.length == 2) {
+        let card1 = listFalseCard[0];
+        let card2 = listFalseCard[1];
+        card1.className = "hiddenCard";
+        card2.className = "hiddenCard";
+    }
+
+    if (currentCard.className = "hiddenCard") {
+        currentCard.className = "guessingCard";
+
+        let listGuessingCard = document.getElementsByClassName("guessingCard");
+
+        if (listGuessingCard.length == 2) {
+            let card1 = listGuessingCard[0];
+            let card2 = listGuessingCard[1];
+
+            if (card1.innerText == card2.innerText) {
+                card1.className = "foundCard";
+                card2.className = "foundCard";
+            } else {
+                card1.className = "falseCard";
+                card2.className = "falseCard";
+            }
+        }
+    }
+}
