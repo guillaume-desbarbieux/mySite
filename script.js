@@ -413,20 +413,35 @@ memoryButtonDifficile.addEventListener("click", () => playMemory('difficile'));
 
 function playMemory(level) {
     let nbPaires = 0;
+    let lienApi = "";
     choixDifficulte();
 
     switch (level) {
         case 'facile':
             nbPaires = 5;
+            lienApi = "https://mocki.io/v1/f3ce40d6-4423-4de6-a4d1-45bc5ba25251";
             break;
         case 'moyen':
             nbPaires = 15;
+            lienApi = "https://mocki.io/v1/57775561-3329-4298-b2b6-9c9232270e32";
             break;
         case 'difficile':
             nbPaires = 25;
+            lienApi = "https://mocki.io/v1/66ffedd0-79a6-4750-a21b-a6ad5876a4f7";
             break;
     }
-    let nbTentatives = 2*nbPaires;
-    console.log(nbPaires," en ",nbTentatives);
 
+    let nbTentatives = 2 * nbPaires;
+    console.log(nbPaires, " en ", nbTentatives);
+
+
+    fetch(lienApi).then(objet => objet.json()).then(result => console.log(result));
 }
+
+
+
+
+
+
+
+
