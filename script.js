@@ -63,7 +63,10 @@ if (addFeedButton) {
     addFeedButton.addEventListener("click", () => {
         getJoke();
     });
-};
+    for (let i = 1; i < 6; i++) {
+        getJoke();
+    };
+}
 
 // Récupération du bouton refresh par l'ID
 const removeFeedButton = document.getElementById("btn-remove-feed");
@@ -477,8 +480,10 @@ function setMemoryPlateau(objet) {
 function returnCard() {
 
     const currentCard = this;
+    const message = document.getElementById("message");
 
     const listFalseCard = document.getElementsByClassName("falseCard");
+
     if (listFalseCard.length == 2) {
         let card1 = listFalseCard[0];
         let card2 = listFalseCard[1];
@@ -488,6 +493,9 @@ function returnCard() {
 
     if (currentCard.className = "hiddenCard") {
         currentCard.className = "guessingCard";
+
+
+
 
         let listGuessingCard = document.getElementsByClassName("guessingCard");
 
@@ -504,4 +512,241 @@ function returnCard() {
             }
         }
     }
+    const listFoundCard = document.getElementsByClassName("foundCard");
+    const listCard = document.getElementsByClassName("cellule");
+
+
+    if (listFoundCard.length == listCard.length) {
+        message.innerText = "Félicitations !";
+    }
+
+}
+
+
+
+// essai dvp memory avec nouvelle méthode (orienté objet)
+
+
+// récupération du bouton Niveau de difficilté par l'ID
+const memoButtonDifficulte = document.getElementById("memo-btn-difficulte");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction choixDifficulte
+memoButtonDifficulte.addEventListener("click", memoChoixDifficulte);
+
+
+// la fonction change l'état des sous menus niveaux de difficultés (hidden ou non)
+function memoChoixDifficulte() {
+
+    const listeNiveaux = document.getElementById("memo-liste-btn-difficulte").children;
+
+    for (let el of listeNiveaux) {
+        if (isHidden(el)) {
+            el.classList.remove("hidden");
+        } else {
+            el.classList.add("hidden");
+        }
+    }
+}
+
+
+// récupération du bouton Niveau facile par l'ID
+const memoButtonFacile = document.getElementById("memo-btn-facile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoButtonFacile.addEventListener("click", () => callMemoAPI('facile'));
+
+// récupération du bouton Niveau moyen par l'ID
+const memoButtonMoyen = document.getElementById("memo-btn-moyen");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoButtonMoyen.addEventListener("click", () => callMemoAPI('moyen'));
+
+// récupération du bouton Niveau facile par l'ID
+const memoButtonDifficile = document.getElementById("memo-btn-difficile");
+
+// le clic sur le bouton Niveau de difficilté appelle la fonction callMemoryAPI
+memoButtonDifficile.addEventListener("click", () => callMemoAPI('difficile'));
+
+// Appel API selon difficulté choisie puis apelle setMemoryPlateau
+function callMemoAPI(level) {
+    let lienApi = "";
+    choixDifficulte();
+
+    switch (level) {
+        case 'facile':
+            lienApi = "https://mocki.io/v1/f3ce40d6-4423-4de6-a4d1-45bc5ba25251";
+            break;
+        case 'moyen':
+            lienApi = "https://mocki.io/v1/57775561-3329-4298-b2b6-9c9232270e32";
+            break;
+        case 'difficile':
+            lienApi = "https://mocki.io/v1/66ffedd0-79a6-4750-a21b-a6ad5876a4f7";
+            break;
+    }
+
+    fetch(lienApi).then(objet => objet.json()).then(result => setMemo(result));
+}
+
+function setMemo(objet) {
+
+    const divPlateauMemo = document.getElementById("plateauMemo")
+
+    // Récupération des images et doublement de chaque
+    let listeImages = Object.values(objet.images);
+    listeImages = listeImages.concat(listeImages);
+
+    console.log("ma liste ", listeImages);
+
+    const listeImagesMelangees = new Array;
+
+    console.log("ma liste melangée ", listeImagesMelangees);
+
+    while (listeImages.length > 0) {
+        let k = Math.floor(Math.random() * listeImages.length);
+        console.log(listeImages, k);
+        listeImagesMelangees.push(listeImages[k]);
+        listeImages.splice(k, 1);
+    }
+    console.log(listeImagesMelangees);
+
+    // Objet qui contient toutes les infos du jeu
+    const memoGame = {
+        status: "playing",
+        tentatives: 0,
+        guessing: [],
+        cards: [],
+        click: function (clicID) {
+            console.log("clic sur ", clicID);
+            if (memoGame.status == "playing") {
+
+                if (memoGame.guessing.length == 2) {
+                    memoGame.clean();
+                }
+
+                let currentCard;
+                for (card of memoGame.cards) {
+                    if (card.id == clicID) {
+                        currentCard = card;
+                    }
+                }
+
+                if (currentCard.status == "hidden") {
+                    currentCard.return();
+                    console.log("test ", memoGame.guessing);
+                    memoGame.guessing.push(currentCard.image);
+
+                    if (memoGame.guessing.length == 2) {
+                        memoGame.tentatives = memoGame.tentatives + 1;
+                        if (memoGame.guessing[0] == memoGame.guessing[1]) {
+                            memoGame.success();
+                        } else {
+                            memoGame.failure();
+                        }
+                    }
+                }
+            }
+        },
+        success: function () {
+            console.log("success");
+            for (card of memoGame.cards) {
+                if (card.status == "guessing") {
+                    card.found();
+                }
+            }
+        },
+        failure: function () {
+            console.log("failure");
+
+            for (card of memoGame.cards) {
+                if (card.status == "guessing") {
+                    card.error();
+                }
+            }
+        },
+        clean: function () {
+            console.log("clean");
+
+            for (card of memoGame.cards) {
+                card.clean();
+                memoGame.guessing = [];
+            }
+        },
+    }
+
+    // On boucle pour créer chaque carte
+    for (let i = 0; i < listeImagesMelangees.length; i++) {
+        const card = {
+            id: i,
+            image: listeImagesMelangees[i],
+            color: "black",
+            status: "hidden",
+            display: "none",
+            return: function () {
+                console.log("return");
+
+                this.status = "guessing";
+                this.color = "yellow";
+                this.display = "block";
+                displayMemo(memoGame, divPlateauMemo);
+            },
+            found: function () {
+                console.log("found", this.id);
+
+                this.status = "found",
+                    this.color = "green";
+                this.display = "block";
+                displayMemo(memoGame, divPlateauMemo);
+            },
+            error: function () {
+                console.log("error", this.id);
+
+                this.status = "error";
+                this.color = "red";
+                this.display = "block";
+                displayMemo(memoGame, divPlateauMemo);
+            },
+            clean: function () {
+                console.log("cardclean", this.id);
+
+                if (this.status == "error") {
+                    this.status = "hidden";
+                    this.color = "black";
+                    this.display = "none";
+                    displayMemo(memoGame, divPlateauMemo);
+                }
+            }
+        };
+        memoGame.cards.push(card);
+    }
+    console.log("mémoGame ", memoGame);
+    console.log(document.getElementById("plateauMemo"));
+    displayMemo(memoGame, divPlateauMemo);
+}
+
+function displayMemo(memoGame, memoDiv) {
+    // On efface le plateau de jeu
+    while (memoDiv.firstChild) {
+        memoDiv.removeChild(memoDiv.firstChild);
+    };
+
+    // On boucle pour chaque carte pour créer les Div
+    for (card of memoGame.cards) {
+        const cardDiv = document.createElement("div");
+        const imgDiv = document.createElement("div");
+
+        cardDiv.style.backgroundColor = card.color;
+        cardDiv.id = card.id;
+        cardDiv.className = "memoCard";
+        cardDiv.addEventListener("click", () => memoGame.click(cardDiv.id));
+
+        imgDiv.style.display = card.display;
+        imgDiv.innerText = card.image;
+        imgDiv.className = "memoImg";
+
+        cardDiv.appendChild(imgDiv);
+        memoDiv.appendChild(cardDiv);
+    }
+
+    const message = document.getElementById("memoMessage");
+    message.innerText = `nombres de tentatives : ${memoGame.tentatives}`;
 }
