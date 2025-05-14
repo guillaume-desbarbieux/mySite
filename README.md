@@ -1,6 +1,7 @@
 # mySite
 Projet de premier site Web - Guillaume Desbarbieux
 
+en ligne sur : https://glittery-meerkat-4a6a51.netlify.app/
 
 Création d'un site avec 3 pages.
 Utilisation de HTML, CSS et JS.
