@@ -615,7 +615,6 @@ function setMemo(objet) {
         tentatives: 0,
         guessing: [],
         cards: [],
-        found
         click: function (clicID) {
             console.log("clic sur ", clicID);
             if (memoGame.status == "playing") {
